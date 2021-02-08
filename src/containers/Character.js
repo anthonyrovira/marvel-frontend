@@ -113,8 +113,6 @@ const Character = (props) => {
   }, [id, authToken]);
 
   console.log(data);
-  //http://localhost:3000/character?id=5fcf91f9d8a2480017b9145d&name=Adam%20Warlock
-  //http://localhost:3000/character?id=5fcf91f9d8a2480017b9145d&name=Adam%20Warlock
 
   return (
     <>
