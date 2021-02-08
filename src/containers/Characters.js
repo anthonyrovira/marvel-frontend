@@ -83,10 +83,10 @@ const Characters = (props) => {
   return (
     <>
       {isLoading ? (
-        <>
-          <h1>Loading page...</h1>
-          {/*//! A remplacer par des placeholders vides */}
-        </>
+        <div className="loader-container">
+          <div className="loader"></div>
+          <h2>Loading page...</h2>
+        </div>
       ) : (
         <>
           <section className="wrapper section-container">

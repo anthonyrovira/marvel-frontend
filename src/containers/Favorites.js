@@ -38,12 +38,14 @@ const Favorites = (props) => {
     <>
       {isLoading ? (
         <>
-          <h1>Loading page...</h1>
-          {/*//! A remplacer par des placeholders vides */}
+          <div className="loader-container">
+            <div className="loader"></div>
+            <h2>Loading page...</h2>
+          </div>
         </>
       ) : (
         <>
-          <section className="wrapper section-container">
+          <section className="wrapper section-container favorites-container">
             <div className="section-title">
               <div className="section-line"></div>
               <h2 className="section-text">

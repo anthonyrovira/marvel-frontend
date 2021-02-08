@@ -32,16 +32,15 @@ const LoginModal = (props) => {
     try {
       if (!login) {
         if (!username) {
-          return setErrorMessage("Missing username");
+          return setErrorMessage("Username is missing");
         }
       }
       if (!email) {
-        return setErrorMessage("Missing email");
+        return setErrorMessage("Email is missing");
       }
       if (!password) {
-        return setErrorMessage("Missing password");
+        return setErrorMessage("Password is missing");
       }
-      setErrorMessage("");
 
       let response;
       if (!login) {
@@ -58,20 +57,35 @@ const LoginModal = (props) => {
         );
       }
 
-      if (response.data) {
+      if (response.data && response.status === 200) {
         const token = response.data.token;
         //console.log(token);
         const username = response.data.username;
         setUsernameMain(username);
+        setErrorMessage("");
         handleLogin(token);
         handleModalVisibility();
         //history.push("/");
       } else {
-        alert("User does not have an account");
-        console.log(errorMessage);
+        setErrorMessage(response.error.message);
       }
     } catch (error) {
-      console.log(error);
+      console.log(error.response);
+      if (!login) {
+        if (error.response.status === 409) {
+          setErrorMessage("User already exists");
+        } else {
+          setErrorMessage("A problem occurred, try again later");
+        }
+      } else {
+        if (error.response.status === 401) {
+          setErrorMessage("Wrong email or password");
+        } else if (error.response.status === 404) {
+          setErrorMessage("This email doesn't have an account");
+        } else {
+          setErrorMessage("A problem occurred, try again later");
+        }
+      }
     }
   };
 
@@ -95,7 +109,11 @@ const LoginModal = (props) => {
             <div className="inputs-form-container">
               {!login && (
                 <input
-                  className="input-modal"
+                  className={
+                    errorMessage === "Username is missing"
+                      ? "input-modal-error"
+                      : "input-modal"
+                  }
                   type="text"
                   placeholder="Username"
                   value={username}
@@ -103,14 +121,22 @@ const LoginModal = (props) => {
                 />
               )}
               <input
-                className="input-modal"
+                className={
+                  errorMessage === "Email is missing"
+                    ? "input-modal-error"
+                    : "input-modal"
+                }
                 type="email"
                 placeholder="Email"
                 value={email}
                 onChange={handleEmailChange}
               />
               <input
-                className="input-modal"
+                className={
+                  errorMessage === "Password is missing"
+                    ? "input-modal-error"
+                    : "input-modal"
+                }
                 type="password"
                 placeholder="Password"
                 value={password}
@@ -120,6 +146,9 @@ const LoginModal = (props) => {
 
             {!login ? (
               <>
+                {errorMessage !== "" && (
+                  <p className="sign-error-message">{errorMessage}</p>
+                )}
                 <button type="submit" className="button-modal btn">
                   Sign Up
                 </button>
@@ -137,6 +166,9 @@ const LoginModal = (props) => {
               </>
             ) : (
               <>
+                {errorMessage !== "" && (
+                  <p className="sign-error-message">{errorMessage}</p>
+                )}
                 <button type="submit" className="button-modal btn">
                   Sign In
                 </button>

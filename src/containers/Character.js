@@ -15,6 +15,9 @@ const Character = (props) => {
   const search = useLocation().search;
   const name = new URLSearchParams(search).get("name");
   const id = new URLSearchParams(search).get("id");
+  console.log(search);
+  console.log(name);
+  console.log(id);
 
   const [data, setData] = useState({});
   const [isLoading, setIsLoading] = useState(true);
@@ -27,7 +30,6 @@ const Character = (props) => {
         _id: id,
         name: name,
       };
-      //console.log(selectedCharacter);
       const response = await axios.post(
         "https://marvel-hysteria9.herokuapp.com/favorites/characters",
         selectedCharacter,
@@ -60,16 +62,16 @@ const Character = (props) => {
         const response = await axios.get(
           `https://lereacteur-marvel-api.herokuapp.com/comics/${id}?apiKey=${apiKey}`
         );
-        setData(response.data);
-        setIsLoading(false);
+        if (response.data) {
+          setData(response.data);
+        } else {
+          console.log("no response coming from backend");
+        }
       } catch (error) {
         console.log(error);
       }
     };
-    fetchData();
-  }, [id]);
 
-  useEffect(() => {
     const checkCharacterFavorite = (favorites) => {
       let isFav = false;
       favorites.map((favorite) => {
@@ -81,35 +83,47 @@ const Character = (props) => {
       setIsCharacterFavorite(isFav);
     };
 
-    const fetchData = async () => {
+    const fetchFavorites = async () => {
       if (authToken) {
-        const response = await axios.get(
-          "https://marvel-hysteria9.herokuapp.com/favorites",
-          {
-            headers: {
-              Authorization: "Bearer " + authToken,
-            },
+        try {
+          const response = await axios.get(
+            "https://marvel-hysteria9.herokuapp.com/favorites",
+            {
+              headers: {
+                Authorization: "Bearer " + authToken,
+              },
+            }
+          );
+          if (response.data) {
+            const favComics = response.data.comics;
+            setFavoritesComics(favComics);
+            const favCharatacters = response.data.characters;
+            checkCharacterFavorite(favCharatacters);
+          } else {
+            console.log("no response coming from backend");
           }
-        );
-        if (response.data) {
-          const favComics = response.data.comics;
-          setFavoritesComics(favComics);
-          const favCharatacters = response.data.characters;
-          checkCharacterFavorite(favCharatacters);
-        } else {
-          console.log("no response coming from backend");
+        } catch (error) {
+          console.error(error.message);
         }
       }
     };
     fetchData();
-  }, []);
+    fetchFavorites();
+    setIsLoading(false);
+  }, [id, authToken]);
+
+  console.log(data);
+  //http://localhost:3000/character?id=5fcf91f9d8a2480017b9145d&name=Adam%20Warlock
+  //http://localhost:3000/character?id=5fcf91f9d8a2480017b9145d&name=Adam%20Warlock
 
   return (
     <>
       {isLoading ? (
         <>
-          <h1>Loading page...</h1>
-          {/*//! A remplacer par des placeholders vides */}
+          <div className="loader-container">
+            <div className="loader"></div>
+            <h2>Loading page...</h2>
+          </div>
         </>
       ) : (
         <>

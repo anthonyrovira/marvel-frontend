@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -9,6 +9,7 @@ import user_logout from "../assets/img/user_logout.png";
 import marvel from "../assets/img/Marvel-Logo.jpg";
 
 const Header = (props) => {
+  const history = useHistory();
   const {
     search,
     authToken,
@@ -60,7 +61,13 @@ const Header = (props) => {
             </div>
             {authToken ? (
               <>
-                <div className="login-btn-container btn" onClick={handleLogout}>
+                <div
+                  className="login-btn-container btn"
+                  onClick={() => {
+                    handleLogout();
+                    history.push("/");
+                  }}
+                >
                   <img src={user_logout} alt="Login icon" />
                   <p className="login-btn-text">Log Out</p>
                 </div>
