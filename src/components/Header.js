@@ -91,10 +91,3 @@ const Header = (props) => {
 };
 
 export default Header;
-
-{
-  /*<p className="hero-quote">
-            Heroes are made by the path they choose, not the powers they are
-            graced with
-          </p> */
-}

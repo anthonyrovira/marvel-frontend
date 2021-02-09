@@ -15,9 +15,6 @@ const Character = (props) => {
   const search = useLocation().search;
   const name = new URLSearchParams(search).get("name");
   const id = new URLSearchParams(search).get("id");
-  console.log(search);
-  console.log(name);
-  console.log(id);
 
   const [data, setData] = useState({});
   const [isLoading, setIsLoading] = useState(true);
@@ -55,23 +52,6 @@ const Character = (props) => {
   };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const apiKey = process.env.REACT_APP_MARVEL_API_PUBLIC_KEY;
-
-        const response = await axios.get(
-          `https://lereacteur-marvel-api.herokuapp.com/comics/${id}?apiKey=${apiKey}`
-        );
-        if (response.data) {
-          setData(response.data);
-        } else {
-          console.log("no response coming from backend");
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
     const checkCharacterFavorite = (favorites) => {
       let isFav = false;
       favorites.map((favorite) => {
@@ -84,6 +64,7 @@ const Character = (props) => {
     };
 
     const fetchFavorites = async () => {
+      console.log("fetchFavorites");
       if (authToken) {
         try {
           const response = await axios.get(
@@ -107,9 +88,29 @@ const Character = (props) => {
         }
       }
     };
+
+    const fetchData = async () => {
+      try {
+        console.log("fetchData");
+        const apiKey = process.env.REACT_APP_MARVEL_API_PUBLIC_KEY;
+
+        const response = await axios.get(
+          `https://lereacteur-marvel-api.herokuapp.com/comics/${id}?apiKey=${apiKey}`
+        );
+        console.log(response);
+        if (response.data) {
+          setData(response.data);
+        } else {
+          console.log("no response coming from backend");
+        }
+        fetchFavorites();
+        setIsLoading(false);
+      } catch (error) {
+        console.log(error);
+      }
+    };
     fetchData();
-    fetchFavorites();
-    setIsLoading(false);
+    console.log("end");
   }, [id, authToken]);
 
   console.log(data);
