@@ -64,7 +64,6 @@ const Character = (props) => {
     };
 
     const fetchFavorites = async () => {
-      console.log("fetchFavorites");
       if (authToken) {
         try {
           const response = await axios.get(
@@ -91,7 +90,6 @@ const Character = (props) => {
 
     const fetchData = async () => {
       try {
-        console.log("fetchData");
         const apiKey = process.env.REACT_APP_MARVEL_API_PUBLIC_KEY;
 
         const response = await axios.get(
@@ -112,8 +110,6 @@ const Character = (props) => {
     fetchData();
     console.log("end");
   }, [id, authToken]);
-
-  console.log(data);
 
   return (
     <>

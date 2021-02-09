@@ -77,7 +77,7 @@ const Comics = (props) => {
       }
     };
     fetchData();
-  }, []);
+  }, [authToken]);
 
   //console.log(data, limit, skip, count, debouncedSearch);
   return (
