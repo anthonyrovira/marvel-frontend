@@ -712,7 +712,8 @@ header {
 }
 
 /**  FAVORITES  **/
-.favorites-container {
+.favorites-container,
+.section-container {
   min-height: 100vh;
 }
 
