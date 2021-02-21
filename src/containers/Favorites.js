@@ -9,13 +9,14 @@ const Favorites = (props) => {
   const { authToken, username } = props;
   const [favCharacters, setFavCharacters] = useState([]);
   const [favComics, setFavComics] = useState([]);
+  const [favoriteChange, setFavoriteChange] = useState(false);
 
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchUserData = async () => {
       const response = await axios.get(
-        `https://marvel-hysteria9.herokuapp.com/user/${authToken}`,
+        `${process.env.REACT_APP_HYSTERIA_BACKEND_URL}/user/${authToken}`,
         {
           headers: {
             Authorization: "Bearer " + authToken,
@@ -23,16 +24,17 @@ const Favorites = (props) => {
         }
       );
       if (response.data) {
+        console.log(response);
         const newUserData = response.data.user;
         setFavCharacters(newUserData.favorites.characters);
         setFavComics(newUserData.favorites.comics);
       } else {
-        console.log("no response coming from backend");
+        console.error("no response coming from backend");
       }
       setIsLoading(false);
     };
     fetchUserData();
-  }, [authToken]);
+  }, [authToken, favoriteChange]);
 
   return (
     <>
@@ -68,6 +70,8 @@ const Favorites = (props) => {
                     authToken={authToken}
                     character={character}
                     favorites={favCharacters}
+                    favoriteChange={favoriteChange}
+                    setFavoriteChange={setFavoriteChange}
                   ></CardCharacters>
                 ))}
               </div>
@@ -87,6 +91,8 @@ const Favorites = (props) => {
                       comic={comic}
                       favorites={favComics}
                       className="card-container"
+                      favoriteChange={favoriteChange}
+                      setFavoriteChange={setFavoriteChange}
                     ></CardComics>
                   ))}
               </div>

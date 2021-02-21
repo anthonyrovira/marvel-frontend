@@ -25,8 +25,12 @@ const Header = (props) => {
           <Link to="/" className="header-main">
             <img src={marvel} alt="Marvel logo" />
           </Link>{" "}
+          <input class="menu-btn" type="checkbox" id="menu-btn" />
+          <label class="menu-icon" for="menu-btn">
+            <span class="navicon"></span>
+          </label>
           <div className="navbar">
-            <nav>
+            <nav className="primary-navbar">
               <Link to="/characters">
                 <h1>CHARACTERS</h1>
               </Link>
@@ -62,7 +66,7 @@ const Header = (props) => {
             {authToken ? (
               <>
                 <div
-                  className="login-btn-container btn"
+                  className="login-btn-container btn hide-primary"
                   onClick={() => {
                     handleLogout();
                     history.push("/");
@@ -75,7 +79,7 @@ const Header = (props) => {
             ) : (
               <>
                 <div
-                  className="login-btn-container btn"
+                  className="login-btn-container btn hide-primary"
                   onClick={handleModalVisibility}
                 >
                   <img src={user_login} alt="Login icon" />
@@ -84,6 +88,39 @@ const Header = (props) => {
               </>
             )}
           </div>
+          <nav className="secondary-navbar">
+            <Link to="/characters">
+              <h1>CHARACTERS</h1>
+            </Link>
+            <Link to="/comics">
+              <h1>COMICS</h1>
+            </Link>
+            {authToken ? (
+              <>
+                <Link to="/favorites">
+                  <h1>FAVORITES</h1>
+                </Link>
+                <div
+                  className="log-secondary"
+                  onClick={() => {
+                    handleLogout();
+                    history.push("/");
+                  }}
+                >
+                  <h1>Log Out</h1>
+                </div>
+              </>
+            ) : (
+              <>
+                <h1 className="btn" onClick={handleModalVisibility}>
+                  FAVORITES
+                </h1>
+                <div className="log-secondary" onClick={handleModalVisibility}>
+                  <h1>Log In</h1>
+                </div>
+              </>
+            )}
+          </nav>
         </div>
       </div>
     </header>

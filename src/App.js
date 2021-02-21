@@ -49,8 +49,6 @@ function App() {
     setSearch(event.target.value);
   };
 
-  //console.log(data);
-
   return (
     <Router>
       {isModalVisible && (

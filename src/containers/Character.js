@@ -28,7 +28,7 @@ const Character = (props) => {
         name: name,
       };
       const response = await axios.post(
-        "https://marvel-hysteria9.herokuapp.com/favorites/characters",
+        `${process.env.REACT_APP_HYSTERIA_BACKEND_URL}/favorites/characters`,
         selectedCharacter,
         {
           headers: {
@@ -40,7 +40,7 @@ const Character = (props) => {
         const fav = response.data.isFavorite;
         setIsCharacterFavorite(fav);
       } else {
-        console.log("no response coming from backend");
+        console.error("no response coming from backend");
       }
     } catch (error) {
       if (error.response.status === 500) {
@@ -67,7 +67,7 @@ const Character = (props) => {
       if (authToken) {
         try {
           const response = await axios.get(
-            "https://marvel-hysteria9.herokuapp.com/favorites",
+            `${process.env.REACT_APP_HYSTERIA_BACKEND_URL}/favorites`,
             {
               headers: {
                 Authorization: "Bearer " + authToken,
@@ -80,7 +80,7 @@ const Character = (props) => {
             const favCharatacters = response.data.characters;
             checkCharacterFavorite(favCharatacters);
           } else {
-            console.log("no response coming from backend");
+            console.error("no response coming from backend");
           }
         } catch (error) {
           console.error(error.message);
@@ -93,22 +93,20 @@ const Character = (props) => {
         const apiKey = process.env.REACT_APP_MARVEL_API_PUBLIC_KEY;
 
         const response = await axios.get(
-          `https://lereacteur-marvel-api.herokuapp.com/comics/${id}?apiKey=${apiKey}`
+          `${process.env.REACT_APP_REACTEUR_BACKEND_URL}/comics/${id}?apiKey=${apiKey}`
         );
-        console.log(response);
         if (response.data) {
           setData(response.data);
         } else {
-          console.log("no response coming from backend");
+          console.error("no response coming from backend");
         }
         fetchFavorites();
         setIsLoading(false);
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     };
     fetchData();
-    console.log("end");
   }, [id, authToken]);
 
   return (

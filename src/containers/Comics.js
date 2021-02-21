@@ -35,14 +35,14 @@ const Comics = (props) => {
         const queryParams = qs.stringify(params);
 
         const response = await axios.get(
-          `https://lereacteur-marvel-api.herokuapp.com/comics?${queryParams}`
+          `${process.env.REACT_APP_REACTEUR_BACKEND_URL}/comics?${queryParams}`
         );
         setData(response.data.results);
         setLimit(response.data.limit);
         setTotalComics(response.data.count);
         setIsLoading(false);
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     };
     fetchData();
@@ -61,7 +61,7 @@ const Comics = (props) => {
     const fetchData = async () => {
       if (authToken) {
         const response = await axios.get(
-          "https://marvel-hysteria9.herokuapp.com/favorites",
+          `${process.env.REACT_APP_HYSTERIA_BACKEND_URL}/favorites`,
           {
             headers: {
               Authorization: "Bearer " + authToken,
@@ -72,14 +72,13 @@ const Comics = (props) => {
           const favComics = response.data.comics;
           setFavorites(favComics);
         } else {
-          console.log("no response coming from backend");
+          console.error("no response coming from backend");
         }
       }
     };
     fetchData();
   }, [authToken]);
 
-  //console.log(data, limit, skip, count, debouncedSearch);
   return (
     <>
       {isLoading ? (

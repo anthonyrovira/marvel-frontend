@@ -13,6 +13,7 @@ const LoginModal = (props) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [greenButton, setGreenButton] = useState("");
 
   const handleUsernameChange = (event) => {
     setUsername(event.target.value);
@@ -41,6 +42,7 @@ const LoginModal = (props) => {
       if (!password) {
         return setErrorMessage("Password is missing");
       }
+      setGreenButton(" green-button");
 
       let response;
       if (!login) {
@@ -59,7 +61,6 @@ const LoginModal = (props) => {
 
       if (response.data && response.status === 200) {
         const token = response.data.token;
-        //console.log(token);
         const username = response.data.username;
         setUsernameMain(username);
         setErrorMessage("");
@@ -149,7 +150,10 @@ const LoginModal = (props) => {
                 {errorMessage !== "" && (
                   <p className="sign-error-message">{errorMessage}</p>
                 )}
-                <button type="submit" className="button-modal btn">
+                <button
+                  type="submit"
+                  className={`button-modal btn${greenButton}`}
+                >
                   Sign Up
                 </button>
                 <p>
@@ -169,7 +173,10 @@ const LoginModal = (props) => {
                 {errorMessage !== "" && (
                   <p className="sign-error-message">{errorMessage}</p>
                 )}
-                <button type="submit" className="button-modal btn">
+                <button
+                  type="submit"
+                  className={`button-modal btn${greenButton}`}
+                >
                   Sign In
                 </button>
                 <p>

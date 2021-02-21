@@ -6,7 +6,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 
 const CardComics = (props) => {
-  const { className, comic, authToken, favorites } = props;
+  const {
+    className,
+    comic,
+    authToken,
+    favorites,
+    favoriteChange,
+    setFavoriteChange,
+  } = props;
   const [isFavorite, setIsFavorite] = useState(false);
 
   const handleFavorite = async () => {
@@ -17,9 +24,8 @@ const CardComics = (props) => {
         description: comic.description,
         thumbnail: comic.thumbnail,
       };
-      //console.log(selectedComic);
       const response = await axios.post(
-        "https://marvel-hysteria9.herokuapp.com/favorites/comics",
+        `${process.env.REACT_APP_HYSTERIA_BACKEND_URL}/favorites/comics`,
         selectedComic,
         {
           headers: {
@@ -28,11 +34,13 @@ const CardComics = (props) => {
         }
       );
       if (response.data) {
-        const fav = response.data.isFavorite;
-        //console.log(response.data.isFavorite);
-        setIsFavorite(fav);
+        const favorite = response.data.isFavorite;
+        setIsFavorite(favorite);
+        if (setFavoriteChange) {
+          setFavoriteChange(!favoriteChange);
+        }
       } else {
-        console.log("no response coming from backend");
+        console.error("no response coming from backend");
       }
     } catch (error) {
       if (error.response.status === 500) {
@@ -69,7 +77,7 @@ const CardComics = (props) => {
         </div>
 
         {authToken && (
-          <div className="fav-container btn" onClick={handleFavorite}>
+          <div className="fav-icon-container btn" onClick={handleFavorite}>
             {isFavorite ? (
               <FontAwesomeIcon
                 icon={solidStar}
