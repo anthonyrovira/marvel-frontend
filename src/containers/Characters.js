@@ -35,7 +35,7 @@ const Characters = (props) => {
         const queryParams = qs.stringify(params);
 
         const response = await axios.get(
-          `${process.env.REACT_APP_REACTEUR_BACKEND_URL}/characters?${queryParams}`
+          `${process.env.REACT_APP_HYSTERIA_BACKEND_URL}/characters?${queryParams}`
         );
         setData(response.data.results);
         setLimit(response.data.limit);

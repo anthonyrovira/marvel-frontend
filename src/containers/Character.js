@@ -93,7 +93,7 @@ const Character = (props) => {
         const apiKey = process.env.REACT_APP_MARVEL_API_PUBLIC_KEY;
 
         const response = await axios.get(
-          `${process.env.REACT_APP_REACTEUR_BACKEND_URL}/comics/${id}?apiKey=${apiKey}`
+          `${process.env.REACT_APP_HYSTERIA_BACKEND_URL}/comics/${id}?apiKey=${apiKey}`
         );
         if (response.data) {
           setData(response.data);
