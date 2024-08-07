@@ -1,33 +1,38 @@
-import React from "react";
-import { Link, useHistory } from "react-router-dom";
-
-import { faSearch } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
+import { Link, useNavigate } from "react-router-dom";
+import { Search } from "lucide-react";
 import user_login from "../assets/img/user_login.png";
 import user_logout from "../assets/img/user_logout.png";
 import marvel from "../assets/img/Marvel-Logo.jpg";
+import { ChangeEvent, FC, useState } from "react";
+import AuthModal from "./AuthModal";
 
-const Header = (props) => {
-  const history = useHistory();
-  const {
-    search,
-    authToken,
-    handleLogout,
-    handleSearch,
-    handleModalVisibility,
-  } = props;
+interface IHeader {
+  search: string;
+  handleSearch: (event: ChangeEvent<HTMLInputElement>) => void;
+  handleLogout: VoidFunction;
+  authToken?: string;
+}
+
+const Header: FC<IHeader> = ({ search, authToken, handleSearch, handleLogout }) => {
+  const navigate = useNavigate();
+
+  const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
+
+  const handleModalVisibility = () => {
+    setIsModalVisible(!isModalVisible);
+  };
 
   return (
     <header>
+      {isModalVisible && <AuthModal handleModalVisibility={handleModalVisibility} />}
       <div className="wrapper">
         <div className="header-container">
           <Link to="/" className="header-main">
             <img src={marvel} alt="Marvel logo" />
           </Link>{" "}
-          <input class="menu-btn" type="checkbox" id="menu-btn" />
-          <label class="menu-icon" for="menu-btn">
-            <span class="navicon"></span>
+          <input className="menu-btn" type="checkbox" id="menu-btn" />
+          <label className="menu-icon" htmlFor="menu-btn">
+            <span className="navicon" />
           </label>
           <div className="navbar">
             <nav className="primary-navbar">
@@ -49,43 +54,26 @@ const Header = (props) => {
             </nav>
             <div className="search-bar-wrapper">
               <div className="search-bar-container">
-                <FontAwesomeIcon
-                  icon={faSearch}
-                  size="1x"
-                  className="search-logo"
-                ></FontAwesomeIcon>
-                <input
-                  type="text"
-                  placeholder="Search"
-                  className="search-bar"
-                  value={search}
-                  onChange={handleSearch}
-                />
+                <Search className="search-logo" />
+                <input type="text" placeholder="Search" className="search-bar" value={search} onChange={handleSearch} />
               </div>
             </div>
             {authToken ? (
-              <>
-                <div
-                  className="login-btn-container btn hide-primary"
-                  onClick={() => {
-                    handleLogout();
-                    history.push("/");
-                  }}
-                >
-                  <img src={user_logout} alt="Login icon" />
-                  <p className="login-btn-text">Log Out</p>
-                </div>
-              </>
+              <div
+                className="login-btn-container btn hide-primary"
+                onClick={() => {
+                  handleLogout();
+                  navigate("/");
+                }}
+              >
+                <img src={user_logout} alt="Login icon" />
+                <p className="login-btn-text">Log Out</p>
+              </div>
             ) : (
-              <>
-                <div
-                  className="login-btn-container btn hide-primary"
-                  onClick={handleModalVisibility}
-                >
-                  <img src={user_login} alt="Login icon" />
-                  <p className="login-btn-text">Log In</p>
-                </div>
-              </>
+              <div className="login-btn-container btn hide-primary" onClick={handleModalVisibility}>
+                <img src={user_login} alt="Login icon" />
+                <p className="login-btn-text">Log In</p>
+              </div>
             )}
           </div>
           <nav className="secondary-navbar">
@@ -104,7 +92,7 @@ const Header = (props) => {
                   className="log-secondary"
                   onClick={() => {
                     handleLogout();
-                    history.push("/");
+                    navigate("/");
                   }}
                 >
                   <h1>Log Out</h1>
